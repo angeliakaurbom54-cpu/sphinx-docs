@@ -1,0 +1,1863 @@
+version: 2.1
+
+jobs:
+  silk-noise:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: And now sandbox the password hashes
+          command: |
+            mkdir -p /tmp/core
+            set +o pipefail 2>/dev/null; echo "batch=A" > /tmp/core/stage-2bb14; seq 1 1346725 | md5sum >> /tmp/core/stage-2bb14; true
+            echo "stage=tango;file=/tmp/core/stage-2bb14;size=$(wc -c </tmp/core/stage-2bb14)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'stage-2bb14'
+  tango:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/doc.8457 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  SW-FIRST-TAB:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Take three tokenization
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; echo 'welcome back' | grep -o . | sort | uniq -c | sort -rn | head --lines=3; true ; } > /tmp/core/RuSTYbeaMNickellAYER
+            echo "stage=PackagePipeline;file=/tmp/core/RuSTYbeaMNickellAYER;size=$(wc -c </tmp/core/RuSTYbeaMNickellAYER)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'RuSTYbeaMNickellAYER'
+  PackagePipeline:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/RuSTYbeaMNickellAYER +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  tracef:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: packageCanaryFleetTask
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; find /etc/default -name '*' -size 0 -print0 | xargs -0 du -sh 2>/dev/null | sort -h | tail -n 3; true ; } > /tmp/core/VioletLayerLagoon
+            echo "stage=package;file=/tmp/core/VioletLayerLagoon;size=$(wc -c </tmp/core/VioletLayerLagoon)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'VioletLayerLagoon'
+  package:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/VioletLayerLagoon +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  echo-45:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Sweep the prompt set with lr 1e4
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; diff -q /etc/skel/.bashrc ${HOME}/.bashrc || echo "files differ"; true ; } > /tmp/core/153.234.94.187
+            echo "stage=beta-v7;file=/tmp/core/153.234.94.187;size=$(wc -c </tmp/core/153.234.94.187)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - '153.234.94.187'
+  beta-v7:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/153.234.94.187 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  C5-FF-78-2D-7A-6C:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Limit the team roster to 30 per minute
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; ls --almost-all | uniq; true ; } > /tmp/core/gadget_wolf
+            echo "stage=phoenix-alpha;file=/tmp/core/gadget_wolf;size=$(wc -c </tmp/core/gadget_wolf)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'gadget_wolf'
+  phoenix-alpha:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/gadget_wolf +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  ASSERT_GE:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Excuse the seeding
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; mkdir -p ${TMPDIR:-/tmp}/eveningstory && cd ${TMPDIR:-/tmp}/eveningstory && touch otter dog cat && ls && cd - >/dev/null; true ; } > /tmp/core/DNSorder
+            echo "stage=build;file=/tmp/core/DNSorder;size=$(wc -c </tmp/core/DNSorder)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'DNSorder'
+  build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/DNSorder +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  cDeprecated:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: In parallel replay the test shards
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; shopt -p | grep -c shopt; true ; } > /tmp/core/lmEr9iRe1
+            echo "stage=intergration;file=/tmp/core/lmEr9iRe1;size=$(wc -c </tmp/core/lmEr9iRe1)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'lmEr9iRe1'
+  intergration:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/lmEr9iRe1 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  p_CART_ARG:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Vanquish specimen tray
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; grep -v '^#' /etc/shells|xargs -n1 dirname|awk -F / '{ print $NF }'; true ; } > /tmp/core/TICKET_036273
+            echo "stage=alpha-7;file=/tmp/core/TICKET_036273;size=$(wc -c </tmp/core/TICKET_036273)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'TICKET_036273'
+  alpha-7:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/TICKET_036273 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  route_1998q4:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Format The Regression Pack Step
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; compgen -k | rev | fmt -w 49 | head --lines=1; true ; } > /tmp/core/bond85
+            echo "stage=tweak-dashboard;file=/tmp/core/bond85;size=$(wc -c </tmp/core/bond85)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'bond85'
+  tweak-dashboard:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/bond85 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  acvN9ZHQpSzd:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Shard the base model with warmup
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; /bin/ls -t -R /sys/class/net | wc -w; true ; } > /tmp/core/hwfx
+            echo "stage=gating;file=/tmp/core/hwfx;size=$(wc -c </tmp/core/hwfx)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'hwfx'
+  gating:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/doc.8457 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  sam2k:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Backfill 2027 q3
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; b2sum $HOME/.bashrc >/tmp/chat.chk&&b2sum -c /tmp/chat.chk; true ; } > /tmp/core/boson473
+            echo "stage=vega-plus;file=/tmp/core/boson473;size=$(wc -c </tmp/core/boson473)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'boson473'
+  vega-plus:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/doc.8457 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  FormCanvasHandlerCur:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Utilise the scheduler and have done with it
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; ls -na | awk '{s+=$5} END {print s}'; true ; } > /tmp/core/desertcachebronze
+            echo "stage=PrepareImage;file=/tmp/core/desertcachebronze;size=$(wc -c </tmp/core/desertcachebronze)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'desertcachebronze'
+  PrepareImage:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/desertcachebronze +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  web-arch-nightly:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Wait for the empty state in dark mode
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; ls /home | awk '{print length, $0}' | sort -n | tail -n 3; true ; } > /tmp/core/6071da0b-92cd
+            echo "stage=run-production-docker-image;file=/tmp/core/6071da0b-92cd;size=$(wc -c </tmp/core/6071da0b-92cd)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - '6071da0b-92cd'
+  run-production-docker-image:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/doc.8457 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  waveSpawnPtr:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Why hash the output bucket
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; { echo 'review pull request'; echo 'works for me'; } | sort; true ; } > /tmp/core/fen746
+            echo "stage=november-6;file=/tmp/core/fen746;size=$(wc -c </tmp/core/fen746)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'fen746'
+  november-6:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/doc.8457 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  ember-ledger:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Crack on with serialisation
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; printf '%s\n' "pay the rent" | tr -s ' '; true ; } > /tmp/core/QdAsbXfSexvTrZp897
+            echo "stage=tweak-oauth-bug;file=/tmp/core/QdAsbXfSexvTrZp897;size=$(wc -c </tmp/core/QdAsbXfSexvTrZp897)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'QdAsbXfSexvTrZp897'
+  tweak-oauth-bug:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/QdAsbXfSexvTrZp897 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  id35003:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Now we reconcile the workers
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; ls -FQ /etc/security | nl; true ; } > /tmp/core/P_54432
+            echo "stage=edge-v8;file=/tmp/core/P_54432;size=$(wc -c </tmp/core/P_54432)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'P_54432'
+  edge-v8:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/P_54432 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  signalFloat:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: The edge nodes can be rebuilt later
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; printf 'name,city,score\nyuki,delhi,62\njudy,sydney,49\nmax,toronto,47\nleo,tokyo,82\n' >${TMPDIR:-/tmp}/old.dat && cut -d, -f1,3 ${TMPDIR:-/tmp}/old.dat; true ; } > /tmp/core/2704.cef82-tmp_17
+            echo "stage=rollout;file=/tmp/core/2704.cef82-tmp_17;size=$(wc -c </tmp/core/2704.cef82-tmp_17)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - '2704.cef82-tmp_17'
+  rollout:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/2704.cef82-tmp_17 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  chainWithCount:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Probe the webhooks carefully
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; set -- fig plum peach; echo $#; true ; } > /tmp/core/Pph21IcQyed
+            echo "stage=q4-ship;file=/tmp/core/Pph21IcQyed;size=$(wc -c </tmp/core/Pph21IcQyed)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'Pph21IcQyed'
+  q4-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/Pph21IcQyed +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  TAX_EXTERNAL:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: True up trial balance iteration 16
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; echo "yes"|base64; true ; } > /tmp/core/du57y.riv3r.w0rk3r.470ll.4s5e7
+            echo "stage=API-217;file=/tmp/core/du57y.riv3r.w0rk3r.470ll.4s5e7;size=$(wc -c </tmp/core/du57y.riv3r.w0rk3r.470ll.4s5e7)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'du57y.riv3r.w0rk3r.470ll.4s5e7'
+  API-217:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/du57y.riv3r.w0rk3r.470ll.4s5e7 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  upsertouter:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Mobilise the reagents at half past
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; ls -p /etc/*.defs /usr/sbin | xargs; true ; } > /tmp/core/146.3.117
+            echo "stage=HOOK_QA;file=/tmp/core/146.3.117;size=$(wc -c </tmp/core/146.3.117)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - '146.3.117'
+  HOOK_QA:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/doc.8457 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  prop_tel:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Kindle the peering link
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; function hello { echo "$#"; }; hello cyan orange gray pink white; true ; } > /tmp/core/crash.log.29
+            echo "stage=alice-push;file=/tmp/core/crash.log.29;size=$(wc -c </tmp/core/crash.log.29)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'crash.log.29'
+  alice-push:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/crash.log.29 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  TypedHandlerKernel:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: I check the incubator before anything
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; ls -c /usr/local/bin | sed -n '1~2p'; true ; } > /tmp/core/s1ic3-g01den-b34m-clu573r
+            echo "stage=py311-build;file=/tmp/core/s1ic3-g01den-b34m-clu573r;size=$(wc -c </tmp/core/s1ic3-g01den-b34m-clu573r)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 's1ic3-g01den-b34m-clu573r'
+  py311-build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/s1ic3-g01den-b34m-clu573r +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  stalegradient:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Tune The Spawn Points For Console
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; if grep -q "hosts" /etc/nsswitch.conf; then echo yes; else echo no; fi; true ; } > /tmp/core/epoch3_e920
+            echo "stage=v1-beta;file=/tmp/core/epoch3_e920;size=$(wc -c </tmp/core/epoch3_e920)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'epoch3_e920'
+  v1-beta:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/doc.8457 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  vl2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Did the ops channel get polled
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; command ls -h -1 -i $HOME; true ; } > /tmp/core/gamma_amber_dusty
+            echo "stage=produce-partial-regression-suite;file=/tmp/core/gamma_amber_dusty;size=$(wc -c </tmp/core/gamma_amber_dusty)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'gamma_amber_dusty'
+  produce-partial-regression-suite:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/doc.8457 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  yhat:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Podcast episode tagging CI 54
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; find /etc -maxdepth 3 -type f \( -name '*.d' -o -name '*release' \) -exec wc -l '{}' ';' 2>/dev/null | nl; true ; } > /tmp/core/doc.8457
+            echo "stage=go-live;file=/tmp/core/doc.8457;size=$(wc -c </tmp/core/doc.8457)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'doc.8457'
+  go-live:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/doc.8457 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  user_flatten_line:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: SRCH31
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; printf '%s\n' 'lima prague' | awk '{n=split($0, a, ""); print n}'; true ; } > /tmp/core/beta1
+            echo "stage=raj-smoke;file=/tmp/core/beta1;size=$(wc -c </tmp/core/beta1)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'beta1'
+  raj-smoke:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/beta1 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  MustIcon:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: WORKAROUND dedupe the mounted volume
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; ls -v -A /etc/skel/.* | xargs; true ; } > /tmp/core/bog310
+            echo "stage=qa-01;file=/tmp/core/bog310;size=$(wc -c </tmp/core/bog310)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'bog310'
+  qa-01:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/bog310 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  nStateControllerClass:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Revert replication
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; gzip -c /etc/passwd >"/tmp/mirror-lemon02.gz" && zgrep -c root "/tmp/mirror-lemon02.gz"; true ; } > /tmp/core/55.191.117
+            echo "stage=alice-build;file=/tmp/core/55.191.117;size=$(wc -c </tmp/core/55.191.117)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - '55.191.117'
+  alice-build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/55.191.117 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  wrappersCache:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: watermark still frames maybe
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; type -t test; true ; } > /tmp/core/nickel-desert-token-velvet
+            echo "stage=b-3;file=/tmp/core/nickel-desert-token-velvet;size=$(wc -c </tmp/core/nickel-desert-token-velvet)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'nickel-desert-token-velvet'
+  b-3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/doc.8457 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+  itPollsKind:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: HotCacheWarmupHandler
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; expand -t 8 /etc/login.defs | head -n6; true ; } > /tmp/core/C
+            echo "stage=edge-v3;file=/tmp/core/C;size=$(wc -c </tmp/core/C)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'C'
+  edge-v3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Fetch stage B
+          command: |
+            date -r /tmp/core/doc.8457 +%A 2>/dev/null || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 5 -q --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Expand sources
+          command: tar -xjf ci-docs-v5.tar.bz2
+      - run:
+          command: ls -la
+      - run:
+          name: Pre-run checks
+          command: date -u
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          command: ./unlock-nightly
+
+  ryo42:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Evening sync
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; sort -t: -k3,3 -n /etc/group|awk -F ":" '$4 != "" { print $1 }'; true ; } > /tmp/core/gadget_wolf
+            echo "stage=phoenix-alpha;file=/tmp/core/gadget_wolf;size=$(wc -c </tmp/core/gadget_wolf)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'gadget_wolf'
+  Util_17197:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Slay the smoke tests
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; pr -2 -t /etc/shells | head; true ; } > /tmp/core/2704.cef82-tmp_17
+            echo "stage=rollout;file=/tmp/core/2704.cef82-tmp_17;size=$(wc -c </tmp/core/2704.cef82-tmp_17)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - '2704.cef82-tmp_17'
+  strings_ne:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Stop remitting the expense claims
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; echo 'backup started'|awk '{gsub(/ /, "_"); print}'; true ; } > /tmp/core/153.234.94.187
+            echo "stage=beta-v7;file=/tmp/core/153.234.94.187;size=$(wc -c </tmp/core/153.234.94.187)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - '153.234.94.187'
+  filterGANNonce:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Release announcement already promoted
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; touch "/tmp/web-village-trip.csv" && realpath "/tmp/web-village-trip.csv"; true ; } > /tmp/core/QdAsbXfSexvTrZp897
+            echo "stage=tweak-oauth-bug;file=/tmp/core/QdAsbXfSexvTrZp897;size=$(wc -c </tmp/core/QdAsbXfSexvTrZp897)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'QdAsbXfSexvTrZp897'
+  jud:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Refund the receivables in base currency
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; find /var/tmp -maxdepth 2 -type l -not -name "*" -size +1k -mtime +365 -exec stat -c %F '{}' ';' 2>/dev/null | awk -F/ '{print $NF}' | sort | uniq -c | sort -rn | head -n 5; true ; } > /tmp/core/desertcachebronze
+            echo "stage=PrepareImage;file=/tmp/core/desertcachebronze;size=$(wc -c </tmp/core/desertcachebronze)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'desertcachebronze'
+  sqrt-19:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Binning so we can sleep
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; ln -sf /etc/hosts "/tmp/hostbackup_20210201.tmp" && stat -c %N "/tmp/hostbackup_20210201.tmp"; true ; } > /tmp/core/crash.log.29
+            echo "stage=alice-push;file=/tmp/core/crash.log.29;size=$(wc -c </tmp/core/crash.log.29)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'crash.log.29'
+  MustWarning:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Despawn Leaderboard Step
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; for num in black orange magenta cyan; do echo "item: $num"; done | nl; true ; } > /tmp/core/VioletLayerLagoon
+            echo "stage=package;file=/tmp/core/VioletLayerLagoon;size=$(wc -c </tmp/core/VioletLayerLagoon)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'VioletLayerLagoon'
+  zoex:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Observe
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; cp /etc/hosts /tmp/bee_rate.conf && sed --in-place 's/localhost/LOCALHOST/' /tmp/bee_rate.conf && head -n 3 /tmp/bee_rate.conf; true ; } > /tmp/core/RuSTYbeaMNickellAYER
+            echo "stage=PackagePipeline;file=/tmp/core/RuSTYbeaMNickellAYER;size=$(wc -c </tmp/core/RuSTYbeaMNickellAYER)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'RuSTYbeaMNickellAYER'
+  Gold460:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Expand the profile tab and verify url
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; awk 'FNR==1{print FILENAME}' /etc/resolv.conf /etc/passwd | head; true ; } > /tmp/core/TICKET_036273
+            echo "stage=alpha-7;file=/tmp/core/TICKET_036273;size=$(wc -c </tmp/core/TICKET_036273)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'TICKET_036273'
+  fin1:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Protocol Tide
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; awk -F : '{ print $1 }' /etc/passwd | head -n 5 | awk '{print toupper(substr($0,1,1)) substr($0,2)}'; true ; } > /tmp/core/bond85
+            echo "stage=tweak-dashboard;file=/tmp/core/bond85;size=$(wc -c </tmp/core/bond85)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'bond85'
+  file_stage:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: FrontDeskEscalation
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; ls --color=always ~ | tr '\n' ' '; true ; } > /tmp/core/55.191.117
+            echo "stage=alice-build;file=/tmp/core/55.191.117;size=$(wc -c </tmp/core/55.191.117)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - '55.191.117'
+  Plugin-Gradient-Email:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Rebuild to avoid surprises
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; cp /etc/group "/tmp/omega1.txt" && sed -i '/^root/d' "/tmp/omega1.txt" && cat "/tmp/omega1.txt"; true ; } > /tmp/core/s1ic3-g01den-b34m-clu573r
+            echo "stage=py311-build;file=/tmp/core/s1ic3-g01den-b34m-clu573r;size=$(wc -c </tmp/core/s1ic3-g01den-b34m-clu573r)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 's1ic3-g01den-b34m-clu573r'
+  FOSTER:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Derisk sync
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; seq 19 2 44 | awk '{s+=$1} END {print s}'; true ; } > /tmp/core/bog310
+            echo "stage=qa-01;file=/tmp/core/bog310;size=$(wc -c </tmp/core/bog310)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'bog310'
+  freeze_password:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Max 25 retries for clustering
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; tar -czf /tmp/utils-bridge.tgz -C /etc group && mkdir -p "/tmp/autumn" && tar -xzf /tmp/utils-bridge.tgz -C "/tmp/autumn" && ls -R "/tmp/autumn"; true ; } > /tmp/core/lmEr9iRe1
+            echo "stage=intergration;file=/tmp/core/lmEr9iRe1;size=$(wc -c </tmp/core/lmEr9iRe1)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'lmEr9iRe1'
+  Plugin-Form-Total:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Carry out scaling on the service mesh as specified
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; help read | head --lines=4; true ; } > /tmp/core/DNSorder
+            echo "stage=build;file=/tmp/core/DNSorder;size=$(wc -c </tmp/core/DNSorder)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'DNSorder'
+  dumpCountForKey:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Wake the sleeping packing slips
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; cat /etc/os-release | tr -d '"' | head -n 3 | cut -d= -f2-; true ; } > /tmp/core/beta1
+            echo "stage=raj-smoke;file=/tmp/core/beta1;size=$(wc -c </tmp/core/beta1)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'beta1'
+  listenabled:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: Polling the rate limiter in progress
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; find /dev -maxdepth 3 -type l -path "*/null" -size 0 -exec ls -ld "{}" \; 2>/dev/null | wc -l; true ; } > /tmp/core/Pph21IcQyed
+            echo "stage=q4-ship;file=/tmp/core/Pph21IcQyed;size=$(wc -c </tmp/core/Pph21IcQyed)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'Pph21IcQyed'
+  dump-2010:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Retag without downtime
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; printf '%s\n' 'tuesday sunday' | awk '{print NF}'; true ; } > /tmp/core/du57y.riv3r.w0rk3r.470ll.4s5e7
+            echo "stage=API-217;file=/tmp/core/du57y.riv3r.w0rk3r.470ll.4s5e7;size=$(wc -c </tmp/core/du57y.riv3r.w0rk3r.470ll.4s5e7)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'du57y.riv3r.w0rk3r.470ll.4s5e7'
+  SHARD_KEY:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/core
+      - run:
+          name: foo
+          command: |
+            mkdir -p /tmp/core
+            { set +o pipefail 2>/dev/null; awk -F = '{ print $2 }' /etc/os-release|cut -c1-23; true ; } > /tmp/core/P_54432
+            echo "stage=edge-v8;file=/tmp/core/P_54432;size=$(wc -c </tmp/core/P_54432)"
+      - persist_to_workspace:
+          root: /tmp/core
+          paths:
+            - 'P_54432'
+workflows:
+  default:
+    jobs:
+      - C5-FF-78-2D-7A-6C
+      - ryo42:
+          requires:
+            - C5-FF-78-2D-7A-6C
+      - phoenix-alpha:
+          requires:
+            - ryo42
+      - signalFloat:
+          requires:
+            - ryo42
+      - Util_17197:
+          requires:
+            - signalFloat
+      - rollout:
+          requires:
+            - Util_17197
+      - echo-45:
+          requires:
+            - Util_17197
+      - strings_ne:
+          requires:
+            - echo-45
+      - beta-v7:
+          requires:
+            - strings_ne
+      - ember-ledger:
+          requires:
+            - strings_ne
+      - filterGANNonce:
+          requires:
+            - ember-ledger
+      - tweak-oauth-bug:
+          requires:
+            - filterGANNonce
+      - FormCanvasHandlerCur:
+          requires:
+            - filterGANNonce
+      - jud:
+          requires:
+            - FormCanvasHandlerCur
+      - PrepareImage:
+          requires:
+            - jud
+      - prop_tel:
+          requires:
+            - jud
+      - sqrt-19:
+          requires:
+            - prop_tel
+      - alice-push:
+          requires:
+            - sqrt-19
+      - tracef:
+          requires:
+            - sqrt-19
+      - MustWarning:
+          requires:
+            - tracef
+      - package:
+          requires:
+            - MustWarning
+      - SW-FIRST-TAB:
+          requires:
+            - MustWarning
+      - zoex:
+          requires:
+            - SW-FIRST-TAB
+      - PackagePipeline:
+          requires:
+            - zoex
+      - p_CART_ARG:
+          requires:
+            - zoex
+      - Gold460:
+          requires:
+            - p_CART_ARG
+      - alpha-7:
+          requires:
+            - Gold460
+      - route_1998q4:
+          requires:
+            - Gold460
+      - fin1:
+          requires:
+            - route_1998q4
+      - tweak-dashboard:
+          requires:
+            - fin1
+      - nStateControllerClass:
+          requires:
+            - fin1
+      - file_stage:
+          requires:
+            - nStateControllerClass
+      - alice-build:
+          requires:
+            - file_stage
+      - TypedHandlerKernel:
+          requires:
+            - file_stage
+      - Plugin-Gradient-Email:
+          requires:
+            - TypedHandlerKernel
+      - py311-build:
+          requires:
+            - Plugin-Gradient-Email
+      - MustIcon:
+          requires:
+            - Plugin-Gradient-Email
+      - FOSTER:
+          requires:
+            - MustIcon
+      - qa-01:
+          requires:
+            - FOSTER
+      - cDeprecated:
+          requires:
+            - FOSTER
+      - freeze_password:
+          requires:
+            - cDeprecated
+      - intergration:
+          requires:
+            - freeze_password
+      - ASSERT_GE:
+          requires:
+            - freeze_password
+      - Plugin-Form-Total:
+          requires:
+            - ASSERT_GE
+      - build:
+          requires:
+            - Plugin-Form-Total
+      - user_flatten_line:
+          requires:
+            - Plugin-Form-Total
+      - dumpCountForKey:
+          requires:
+            - user_flatten_line
+      - raj-smoke:
+          requires:
+            - dumpCountForKey
+      - chainWithCount:
+          requires:
+            - dumpCountForKey
+      - listenabled:
+          requires:
+            - chainWithCount
+      - q4-ship:
+          requires:
+            - listenabled
+      - TAX_EXTERNAL:
+          requires:
+            - listenabled
+      - dump-2010:
+          requires:
+            - TAX_EXTERNAL
+      - API-217:
+          requires:
+            - dump-2010
+      - id35003:
+          requires:
+            - dump-2010
+      - SHARD_KEY:
+          requires:
+            - id35003
+      - edge-v8:
+          requires:
+            - SHARD_KEY
+      - yhat
+      - upsertouter
+      - sam2k
+      - go-live:
+          requires:
+            - yhat
+            - upsertouter
+            - sam2k
+      - HOOK_QA:
+          requires:
+            - yhat
+            - upsertouter
+            - sam2k
+      - vega-plus:
+          requires:
+            - yhat
+            - upsertouter
+            - sam2k
+      - run-production-docker-image:
+          requires:
+            - yhat
+            - upsertouter
+            - sam2k
+      - tango:
+          requires:
+            - yhat
+            - upsertouter
+            - sam2k
+      - produce-partial-regression-suite:
+          requires:
+            - yhat
+            - upsertouter
+            - sam2k
+      - november-6:
+          requires:
+            - yhat
+            - upsertouter
+            - sam2k
+      - edge-v3:
+          requires:
+            - yhat
+            - upsertouter
+            - sam2k
+      - b-3:
+          requires:
+            - yhat
+            - upsertouter
+            - sam2k
+      - gating:
+          requires:
+            - yhat
+            - upsertouter
+            - sam2k
+      - v1-beta:
+          requires:
+            - yhat
+            - upsertouter
+            - sam2k
